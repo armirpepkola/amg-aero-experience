@@ -3,13 +3,15 @@
 import { Environment, ContactShadows } from "@react-three/drei";
 import { Suspense } from "react";
 import { CarModel } from "./CarModel";
+import { CameraRig } from "./CameraRig";
 
 export default function Scene() {
   return (
     <>
       <color attach="background" args={["#050505"]} />
       
-      {/* 1. Core Lighting */}
+      <CameraRig />
+
       <ambientLight intensity={0.4} />
       <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
       <directionalLight position={[-10, 10, -5]} intensity={0.5} color="#eeeeee" />
