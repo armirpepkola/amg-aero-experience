@@ -4,9 +4,11 @@ import { useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+import { useStore } from "@/lib/store/useStore";
 
 export function CameraRig() {
   const { camera } = useThree();
+  const setChapter = useStore((state) => state.setChapter);
   
   const cameraProxy = useRef({
     x: 0, y: 0, z: 5,
@@ -22,27 +24,18 @@ export function CameraRig() {
           start: "top top",
           end: "bottom bottom",
           scrub: 1.5,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            if (progress < 0.33) {
+              setChapter("Viewing the front aerodynamic splitter and Panamericana grille.");
+            } else if (progress >= 0.33 && progress < 0.66) {
+              setChapter("Viewing the carbon fiber hood louvers establishing laminar flow.");
+            } else {
+              setChapter("Viewing the massive dual-plane active rear wing.");
+            }
+          }
         }
       });
-
-      tl.to(cameraProxy.current, {
-        x: 0, y: -0.5, z: 2.5,
-        lookAtX: 0, lookAtY: 0, lookAtZ: 0,
-        ease: "power1.inOut"
-      }, 0);
-
-      tl.to(cameraProxy.current, {
-        x: 3, y: 1.5, z: 1,
-        lookAtX: 0, lookAtY: 0.5, lookAtZ: 0,
-        ease: "power1.inOut"
-      });
-
-      tl.to(cameraProxy.current, {
-        x: -2.5, y: 1.5, z: -3.5,
-        lookAtX: 0, lookAtY: 0.5, lookAtZ: -1,
-        ease: "power2.inOut"
-      });
-      
     });
 
     return () => ctx.revert();
